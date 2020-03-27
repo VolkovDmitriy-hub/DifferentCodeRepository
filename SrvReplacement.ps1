@@ -1,6 +1,6 @@
-#Current version 0.0.4
+#Current version 0.0.5
 
-Write-Host "Выберите действие"
+Write-Host "Выбирите действие"
 Write-Host "1 - Копирование данных сервера"
 Write-Host "2 - Востановление данных сервера"
 $Action = read-host
@@ -9,12 +9,10 @@ $Action = read-host
 $Service1cName = AmmyyAdmin
 $SqlServer = "apteka"
 $SqlLogin = "sa"
-$SqlBakPath = D:\backup
 $CurrentDate = Get-Date -Format _dd_MM_yyyy
 $SqlBackupName = $SqlBase+$CurrentDate
 
 #Функции
-
 function SqlBackup {
     $SqlConnection = New-Object System.Data.SqlClient.SqlConnection
         $SqlConnection.ConnectionString = "Server=$SqlServer; Database=$SqlBase; User ID=$SqlLogin; Password=$SqlPassw;"
@@ -28,42 +26,44 @@ function SqlBackup {
         $objReader.close()
 
 }
-
-#Если выбрано компирование.
+#Если выбрано копирование.
 if ($Action -eq 1) {
-    Write-Host "Введите сетевой путь коталога в который необходимо скопировать данные сервера"
+    Write-Host "Введите путь до каталога в который необходимо скопировать данные с сервера."
     $Destination = Read-Host
     $IsPath = Test-Path $Destination
     if ($IsPath -eq "True") {
         New-Item -Path $Destination\SrvReplacement -ItemType Directory
+        $SqlBakPath = "$Destination\SrvReplacement"
         Stop-Service $Service1cName
-        Write-Host "Введите имя бызы данных SQL"
+        Write-Host "Введите имя базы SQL"
         $SqlBase = Read-Host
         Write-Host "Введите пароль SQL сервера"
         $SqlPassw = Read-Host
-        SqlBackup
+        #SqlBackup
+        Copy-Item D:\mail\* $Destination\SrvReplacement\mail
+        Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history\* $Destination\SrvReplacement\mail
     }
     else {
-        Write-Host "Указанный путь не найден или недостаточно прав для записи."
+        Write-Host "Не найден указаный каталог, либо нет доступа."
     }
 }
 
 #Если выбрано востановление.
 elseif ($Action -eq 2) {
-    Write-Host "Введите сетевой путь коталога из которого необходимо востановить данные сервера"
+    Write-Host "Введите путь до каталога с которого необходимо востановить данные сервера."
     $Destination = Read-Host
     $IsPath = Test-Path $Destination
     if ($IsPath -eq "True") {
-        Write-Host "все хоршо"
+        Write-Host "Все хорошо"
     }
     else {
         Write-Host "Все плохо"
     }
 }
 
-#Если выбран вариант отлиный от предложанных.
+#Если выбран другой вариант.
 else {
-    Write-Host "Предложено варианта два было вам, выбрали третий Вы. Дозор на этом закончен Ваш."
+    Write-Host "Вам было предложено 2 варианта, Вы выбрали третий. На этом Ваш дозор окончен."
 }
 
 
