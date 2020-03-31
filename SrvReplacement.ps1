@@ -6,11 +6,10 @@ Write-Host "2 - Востановление данных сервера"
 $Action = read-host
 
 #Глобальные переменные
-$Service1cName = AmmyyAdmin
+$Service1cName = "1C:Server"
 $SqlServer = "apteka"
 $SqlLogin = "sa"
 $CurrentDate = Get-Date -Format _dd_MM_yyyy
-$SqlBackupName = $SqlBase+$CurrentDate
 
 #Функции
 function SqlBackup {
@@ -33,15 +32,16 @@ if ($Action -eq 1) {
     $IsPath = Test-Path $Destination
     if ($IsPath -eq "True") {
         New-Item -Path $Destination\SrvReplacement -ItemType Directory
-        $SqlBakPath = "$Destination\SrvReplacement"
+        $SqlBakPath = "$Destination\SrvReplacement\"
         Stop-Service $Service1cName
         Write-Host "Введите имя базы SQL"
         $SqlBase = Read-Host
         Write-Host "Введите пароль SQL сервера"
         $SqlPassw = Read-Host
-        #SqlBackup
-        Copy-Item D:\mail\* $Destination\SrvReplacement\mail
-        Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history\* $Destination\SrvReplacement\mail
+        $SqlBackupName = $SqlBase+$CurrentDate
+        SqlBackup
+        Copy-Item D:\mail $Destination\SrvReplacement\mail -Recurse -Container
+        Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history $Destination\SrvReplacement\history -Recurse -Container
     }
     else {
         Write-Host "Не найден указаный каталог, либо нет доступа."
