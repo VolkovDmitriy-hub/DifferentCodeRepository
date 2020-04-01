@@ -42,6 +42,7 @@ if ($Action -eq 1) {
         SqlBackup
         Copy-Item D:\mail $Destination\SrvReplacement\mail -Recurse -Container
         Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history $Destination\SrvReplacement\history -Recurse -Container
+        Copy-Item C:\Users\Пользователь\Desktop $Destination\SrvReplacement\Desktop -Recurse -Container
     }
     else {
         Write-Host "Не найден указаный каталог, либо нет доступа."
