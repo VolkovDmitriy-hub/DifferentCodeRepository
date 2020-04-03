@@ -1,4 +1,4 @@
-#Current version 0.0.5
+#Current version 0.0.7
 
 Write-Host "Выбирите действие"
 Write-Host "1 - Копирование данных сервера"
@@ -10,6 +10,10 @@ $Service1cName = "1C:Server"
 $SqlServer = "apteka"
 $SqlLogin = "sa"
 $CurrentDate = Get-Date -Format _dd_MM_yyyy
+Write-Host "Введите имя базы SQL"
+    $SqlBase = Read-Host
+Write-Host "Введите пароль SQL сервера"
+    $SqlPassw = Read-Host
 
 #Функции
 function SqlBackup {
@@ -31,18 +35,13 @@ if ($Action -eq 1) {
     $Destination = Read-Host
     $IsPath = Test-Path $Destination
     if ($IsPath -eq "True") {
-        New-Item -Path $Destination\SrvReplacement -ItemType Directory
-        $SqlBakPath = "$Destination\SrvReplacement\"
+        $SqlBakPath = "$Destination\"
         Stop-Service $Service1cName
-        Write-Host "Введите имя базы SQL"
-        $SqlBase = Read-Host
-        Write-Host "Введите пароль SQL сервера"
-        $SqlPassw = Read-Host
         $SqlBackupName = $SqlBase+$CurrentDate
         SqlBackup
-        Copy-Item D:\mail $Destination\SrvReplacement\mail -Recurse -Container
-        Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history $Destination\SrvReplacement\history -Recurse -Container
-        Copy-Item C:\Users\Пользователь\Desktop $Destination\SrvReplacement\Desktop -Recurse -Container
+        Copy-Item D:\mail $Destination\mail -Recurse -Container
+        Copy-Item C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history $Destination\history -Recurse -Container
+        Copy-Item C:\Users\Пользователь\Desktop $Destination\Desktop -Recurse -Container
     }
     else {
         Write-Host "Не найден указаный каталог, либо нет доступа."
@@ -55,7 +54,9 @@ elseif ($Action -eq 2) {
     $Destination = Read-Host
     $IsPath = Test-Path $Destination
     if ($IsPath -eq "True") {
-        Write-Host "Все хорошо"
+        Copy-Item $Destination\mail D:\mail  -Recurse -Container
+        Copy-Item $Destination\history C:\Users\Пользователь\AppData\Roaming\Psi+\profiles\default\history  -Recurse -Container
+        Copy-Item $Destination\Desktop C:\Users\Пользователь\Desktop -Recurse -Container
     }
     else {
         Write-Host "Все плохо"
