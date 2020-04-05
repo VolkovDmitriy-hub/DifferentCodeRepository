@@ -10,7 +10,7 @@ $Service1cName = "1C:Server"
 $SqlServer = "apteka"
 $SqlLogin = "sa"
 $CurrentDate = Get-Date -Format _dd_MM_yyyy
-Write-Host "¬ведите им€ базы SQL"
+Write-Host "¬ведите им€ базы данных SQL"
     $SqlBase = Read-Host
 Write-Host "¬ведите пароль SQL сервера"
     $SqlPassw = Read-Host
